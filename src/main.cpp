@@ -43,6 +43,7 @@ class OLED {
 		int pixel(int x, int y);
 		int draw_h_line(int x1, int x2, int y);
 		int draw_v_line(int y1, int y2, int x);
+		int draw_line(int x1, int y1, int x2, int y2);
 		int draw_rectangle(int x1, int y1, int x2, int y2);
 		int draw_letter(char letter[8]);
 		int write_text(char text[16]);
@@ -218,6 +219,21 @@ int OLED::draw_rectangle(int x1,int y1,int x2, int y2){
 	this->draw_v_line(y1, y2, x2);
 	return 1;
 }
+int OLED::draw_line(int x1, int y1, int x2, int y2){
+	int k;
+	k = 1000*(y2 - y1) / (x2 - x1);
+	printf("k = %d \n", k);
+	int y;
+	int y8;
+	int b8;
+	for(int i = x1; i <= x2; i++){
+		y = (i - x1) * k / 1000 + y1;
+		y8 = get_y8(y);
+		b8 = get_b8(y);
+		this->buffer[i][y8] |= 1 << b8;
+	}
+	return 1;
+}
 
 int OLED::draw_letter(char letter[8]){
 	for (int i = 0; i < 8; i++){
@@ -228,7 +244,6 @@ int OLED::draw_letter(char letter[8]){
 }
 int OLED::write_text(char text[16]){
 	for (int i = 0; i < strlen(text); i++){
-		//this->draw_letter(font[text[i]]);
 		this->draw_letter(font[int(text[i])]);
 	}
 	return 1;
@@ -245,6 +260,7 @@ void app_main() {
 	//ekrans.pixel(127, 63);
 	//ekrans.draw_rectangle(5, 10, 20, 40);
 	ekrans.write_text("Chemtrails...");
+	ekrans.draw_line(10, 30, 60, 60);
 	ekrans.print_buffer();
 	ekrans.refresh();
     while(1){
