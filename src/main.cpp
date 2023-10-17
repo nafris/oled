@@ -229,7 +229,7 @@ int OLED::draw_letter(char letter[8]){
 int OLED::write_text(char text[16]){
 	for (int i = 0; i < strlen(text); i++){
 		//this->draw_letter(font[text[i]]);
-		this->draw_letter(font[40]);
+		this->draw_letter(font[int(text[i])]);
 	}
 	return 1;
 }
@@ -241,9 +241,10 @@ void app_main() {
 	ekrans.clear(0x3c);
 	ekrans.line(10, 10, 10, 50);
 	ekrans.clear_buffer();
-	ekrans.pixel(10, 10);
-	ekrans.pixel(127, 63);
-	ekrans.draw_rectangle(5, 10, 20, 40);
+	//ekrans.pixel(10, 10);
+	//ekrans.pixel(127, 63);
+	//ekrans.draw_rectangle(5, 10, 20, 40);
+	ekrans.write_text("Chemtrails...");
 	ekrans.print_buffer();
 	ekrans.refresh();
     while(1){
