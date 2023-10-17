@@ -221,8 +221,7 @@ int OLED::draw_rectangle(int x1,int y1,int x2, int y2){
 }
 int OLED::draw_line(int x1, int y1, int x2, int y2){
 	int k;
-	k = 1000*(y2 - y1) / (x2 - x1);
-	printf("k = %d \n", k);
+	k = 1000 * (y2 - y1) / (x2 - x1);
 	int y;
 	int y8;
 	int b8;
