@@ -3,16 +3,15 @@
 class OLED {
     private:
 		int I2C_ADDR;
-		bool init_done;
+		bool init_done = false;
 		uint8_t buffer[128][8];
 		uint8_t cursorX = 0;
 		uint8_t cursorY = 0;
 		
     public:
-        int init(int SCL_PIN, int SDA_PIN, int I2C_ADDR);
-		int clear(int I2C_ADDR);
+        int init(int SCL_PIN, int SDA_PIN, int ADDR);
+		int clear(void);
 		int clear_buffer(void);
-		int line(int x1, int y1, int x2, int y2);
 		int refresh(void);
 		int print_buffer(void); // prints to terminal
 		int pixel(int x, int y);
