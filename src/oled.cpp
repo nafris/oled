@@ -143,18 +143,22 @@ int OLED::refresh(){
 	return 1;
 }
 
-int OLED::pixel(int x, int y){
+int OLED::pixel(int x, int y, bool colour){
 	if(!init_done){
 		return -1;
 	}
 	
 	int y8 = get_y8(y);
 	int b8 = get_b8(y);
-	buffer[x][y8] |= 1 <<b8;
+	if (colour){
+		buffer[x][y8] |= 1 << b8;
+	}else{
+		buffer[x][y8] &= ~(1 << b8);
+	}
 	return 1;
 }
 
-int OLED::draw_h_line(int x1, int x2, int y){
+int OLED::draw_h_line(int x1, int x2, int y, bool colour){
 	if(!init_done){
 		return -1;
 	}
@@ -163,11 +167,15 @@ int OLED::draw_h_line(int x1, int x2, int y){
 	int y8 = get_y8(y);
 	int b8 = get_b8(y);
 	for(int i = x1; i <= x2; i++){
-		buffer[i][y8] |= 1 << b8;
+		if (colour){
+			buffer[i][y8] |= 1 << b8;
+		}else{
+			buffer[i][y8] &= ~(1 << b8);
+		}
 	}
 	return 1;	
 }
-int OLED::draw_v_line(int y1, int y2, int x){
+int OLED::draw_v_line(int y1, int y2, int x, bool colour){
 	if(!init_done){
 		return -1;
 	}
@@ -178,22 +186,26 @@ int OLED::draw_v_line(int y1, int y2, int x){
     for (int i = y1; i <= y2; i++){
 		y8 = get_y8(i);
 		b8 = get_b8(i);
-		buffer[x][y8] |= 1 << b8;
+		if (colour){
+			buffer[x][y8] |= 1 << b8;
+		}else{
+			buffer[x][y8] &= ~(1 << b8);
+		}
 	}
 	return 1;
 }
-int OLED::draw_rectangle(int x1,int y1,int x2, int y2){
+int OLED::draw_rectangle(int x1,int y1,int x2, int y2, bool colour){
 	if(!init_done){
         return -1;
     }
     if((x2 < x1) || (y2 < y1)) return -2;
-    draw_h_line(x1, x2, y1);
-	draw_h_line(x1, x2, y2);
-	draw_v_line(y1, y2, x1);
-	draw_v_line(y1, y2, x2);
+    draw_h_line(x1, x2, y1, colour);
+	draw_h_line(x1, x2, y2, colour);
+	draw_v_line(y1, y2, x1, colour);
+	draw_v_line(y1, y2, x2, colour);
 	return 1;
 }
-int OLED::draw_line(int x1, int y1, int x2, int y2){
+int OLED::draw_line(int x1, int y1, int x2, int y2, bool colour){
 	if(!init_done){
         return -1;
     }
@@ -208,7 +220,11 @@ int OLED::draw_line(int x1, int y1, int x2, int y2){
 		y = (i - x1) * k / 1000 + y1;
 		y8 = get_y8(y);
 		b8 = get_b8(y);
-		buffer[i][y8] |= 1 << b8;
+		if (colour){
+			buffer[i][y8] |= 1 << b8;
+		}else{
+			buffer[i][y8] &= ~(1 << b8);
+		}
 	}
 	return 1;
 }
